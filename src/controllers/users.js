@@ -7,11 +7,11 @@ const redisClient = new Redis();
 redisClient.on("connect", () => {
   console.log("connected to redis successfully!");
 });
-// redisClient.flushdb().then(() => {
-//   console.log("Database cleared");
-// });
-redisClient.on("error", (error) => {
-  console.log("Redis connection error :", error);
+redisClient.flushdb().then(() => {
+  console.log("Database cleared");
+});
+redisClient.on("error", (err) => {
+  return res.status(err.statusCode).json({ error: err.message });
 });
 
 async function isUsernameExists(username) {
@@ -68,7 +68,7 @@ const userController = {
             return res.status(err.statusCode).json({ error: err.message });
           });
       });
-    } catch (error) {
+    } catch (err) {
       return res.status(err.statusCode).json({ error: err.message });
     }
   },
